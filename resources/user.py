@@ -26,3 +26,18 @@ class UserRegister(Resource):
 
 
         return {"message": "User created"}, 201
+    
+class User(Resource):
+    def get(self, username):
+        user = UserModel.find_by_username(username)
+        if user:
+            return user.json()
+        else:
+            return {'message': f'User named {username} was not found'}, 404
+
+    def delete(self, username):
+        user = UserModel.find_by_username(username)
+        if user:
+            user.delete_from_db()
+            return {'message': 'User deleted'} 
+        return {'message': f"User named {username} doesn't exist"}, 404
