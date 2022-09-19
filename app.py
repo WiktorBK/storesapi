@@ -2,7 +2,7 @@ import os
 from flask_jwt_extended import JWTManager
 from flask import Flask 
 from flask_restful import Api
-from resources.user import UserRegister, User, UserLogin
+from resources.user import UserRegister, User, UserLogin, Users
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from db import db
@@ -35,6 +35,9 @@ api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
 api.add_resource(User, '/user/<string:username>')
 api.add_resource(UserLogin, '/login')
+api.add_resource(Users, '/users')
+
+
 
 if __name__ == '__main__':
     db.init_app(app)
