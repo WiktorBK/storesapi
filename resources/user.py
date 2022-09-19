@@ -60,6 +60,6 @@ class UserLogin(Resource):
             }
         return {'message': 'Invalid credentials'}, 401
 
-class Users(Resource):
+class UserList(Resource):
     def get(self):
-        return {"Users": [user.json() for user in UserModel.find_all()]}
+        return {'items': [user.json() for user in UserModel.find_all()]}
