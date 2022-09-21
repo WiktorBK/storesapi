@@ -1,5 +1,9 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import (
+    create_access_token, 
+    create_refresh_token, 
+    jwt_refresh_token_required, 
+    get_jwt_identity)
 from models.user import UserModel
 import hmac
 
@@ -45,7 +49,6 @@ class User(Resource):
         return {'message': f"User named {username} doesn't exist"}, 404
 
 class UserLogin(Resource):
-
     @classmethod
     def post(cls):
         data = _user_parser.parse_args()
@@ -63,3 +66,10 @@ class UserLogin(Resource):
 class UserList(Resource):
     def get(self):
         return {'items': [user.json() for user in UserModel.find_all()]}
+
+class TokenRefresh(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+        current_user = get_jwt_identity()
+        new_token = create_access_token(identity=current_user, fresh=False)
+        return {'access_token': new_token}
